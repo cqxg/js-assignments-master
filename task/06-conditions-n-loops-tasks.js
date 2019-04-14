@@ -135,8 +135,15 @@ function isTriangle(a,b,c) {
  *  
  */
 function doRectanglesOverlap(rect1, rect2) {
-    throw new Error('Not implemented');
+    let x1_center = rect1['left'] + rect1['width']/2;
+    let y1_center = rect1['top'] + rect1['height']/2;
+    let x2_center = rect2['left'] + rect2['width']/2;
+    let y2_center = rect2['top'] + rect2['height']/2;
+    let delta_x = Math.abs(x2_center - x1_center);
+    let delta_y = Math.abs(y2_center - y1_center);
+    return delta_x < 0.5*(rect1['width'] + rect2['width']) && delta_y < 0.5*(rect1['height'] + rect2['height'])
 }
+
 
 
 /**
@@ -166,7 +173,9 @@ function doRectanglesOverlap(rect1, rect2) {
  *   
  */
 function isInsideCircle(circle, point) {
-    throw new Error('Not implemented');
+    let delta_x = point.x - circle.center.x;
+    let delta_y = point.y - circle.center.y;
+    return Math.sqrt(delta_x**2 + delta_y**2) < circle.radius
 }
 
 
@@ -272,8 +281,20 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(ccn) {
-    throw new Error('Not implemented');
+function isCreditCardNumber(cnn) {
+    let sum = 0;
+    let digits = cnn.toString()
+  for (let i = 0; i < digits.length; i++) {
+    let cardNum = parseInt(digits[i]);
+    if ((digits.length - i) % 2 === 0) {
+      cardNum = cardNum * 2;
+      if (cardNum > 9) {
+        cardNum = cardNum - 9;
+      }
+    }
+    sum += cardNum;
+  }
+  return sum % 10 === 0;
 }
 
 
@@ -292,18 +313,12 @@ function isCreditCardNumber(ccn) {
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-    let z = num.toString();
-    if (z.length == 2) {
-      let x = parseInt(z[0]) + parseInt(z[1]);
-      return x;
-    } else if(z.length > 2){
-      let i;
-      let y = 0;
-      for(i=0;i<z.length;i++){
-        y += parseInt(z[i]);
-      }
-      return y;
+    let arr = num.toString().split('').map(el => parseInt(el))
+    let newnum = arr.reduce((a,b) => a+b)
+    if (newnum >= 10) {
+        return getDigitalRoot(newnum)
     }
+    return newnum
 }
 
 
@@ -389,7 +404,16 @@ function timespanToHumanString(startDate, endDate) {
  *    365, 10 => '365'
  */
 function toNaryString(num, n) {
-    throw new Error('Not implemented');
+    let arr = [];
+    let ans = num;
+    while(ans >= n-1) {
+        arr.unshift((ans%n).toString())
+        ans = Math.floor(ans/n)
+    }
+    if (ans) {
+        arr.unshift(ans)
+    }
+    return arr.join('')
 }
 
 
